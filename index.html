@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <!-- TWEET -->
+    <blockquote class="twitter-tweet" id="tweets-container">
+      <p lang="en" dir="ltr">Pretty much</p>
+      &mdash; Elon Musk (@elonmusk)
+      <a href="https://twitter.com/CandeGarzon_?ref_src=twsrc%5Etfw"
+        >February 9, 2022</a
+      >
+    </blockquote>
+    <script
+      id="script-tweet-id"
+      async
+      src="https://platform.twitter.com/widgets.js"
+      charset="utf-8"
+    ></script>
+
+    <!-- TIMER -->
+    <div id="counter">
+      Lo que metas aquí aparece solo si hay problemas con el script.
+    </div>
+
+    <br />
+    <br />
+    <br />
+
+    <!-- SCORE -->
+    <div id="score"></div>
+
+    <!-- PROGRESS BAR -->
+    <div>
+      <div id="barStatus"></div>
+      <div id="progressBar">
+        <div id="no"></div>
+        <div id="low"></div>
+        <div id="medium"></div>
+        <div id="normal"></div>
+        <div id="high"></div>
+        <div id="max"></div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      const no = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+      const low = [
+        17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
+      ];
+      const medium = [
+        33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+      ];
+      const normal = [
+        49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64,
+      ];
+      const high = [
+        65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
+      ];
+      const max = [
+        81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98,
+        99, 100,
+      ];
+
+      fetch("https://tweet-elon-musk.herokuapp.com/", {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const dataStorage = JSON.parse(localStorage.getItem("tweet"));
+          if (
+            dataStorage &&
+            dataStorage?.tweet === data.tweet &&
+            dataStorage?.id === data.id
+          ) {
+            return;
+          }
+
+          localStorage.setItem("tweet", JSON.stringify(data));
+
+          location.reload();
+        })
+        .catch((error) => {
+          alert("Error: please try again later");
+        });
+
+      const data = JSON.parse(localStorage.getItem("tweet"));
+      const link = document.querySelector(".twitter-tweet a");
+      const script = document.querySelector("#script-tweet-id");
+      link.href = data.url_embed;
+      script.src = data.url_embed;
+      score.innerHTML = `Score: ${data.score}/100`;
+
+      const progress = document.querySelector("#barStatus");
+
+      progress.style.left = `${data.score}%`;
+
+      if (no.includes(data.score)) {
+        document.querySelector("#no").style.opacity = "1";
+      } else if (low.includes(data.score)) {
+        document.querySelector("#low").style.opacity = "1";
+      } else if (medium.includes(data.score)) {
+        document.querySelector("#medium").style.opacity = "1";
+      } else if (normal.includes(data.score)) {
+        document.querySelector("#normal").style.opacity = "1";
+      } else if (high.includes(data.score)) {
+        document.querySelector("#high").style.opacity = "1";
+      } else if (max.includes(data.score)) {
+        document.querySelector("#max").style.opacity = "1";
+      }
+
+      function CountUp(initDate, id) {
+        this.beginDate = new Date(initDate);
+        this.countainer = document.getElementById(id);
+        this.numOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        (this.borrowed = 0),
+          (this.hours = 0),
+          (this.minutes = 0),
+          (this.seconds = 0);
+        this.updateNumOfDays();
+        this.updateCounter();
+      }
+
+      // TIME
+      CountUp.prototype.updateNumOfDays = function () {
+        var dateNow = new Date();
+        var currYear = dateNow.getFullYear();
+        if ((currYear % 4 == 0 && currYear % 100 != 0) || currYear % 400 == 0) {
+          this.numOfDays[1] = 29;
+        }
+        var self = this;
+        setTimeout(function () {
+          self.updateNumOfDays();
+        }, new Date(currYear + 1, 1, 2) - dateNow);
+      };
+
+      CountUp.prototype.datePartDiff = function (then, now, MAX) {
+        var diff = now - then - this.borrowed;
+        this.borrowed = 0;
+        if (diff > -1) return diff;
+        this.borrowed = 1;
+        return MAX + diff;
+      };
+
+      CountUp.prototype.calculate = function () {
+        var currDate = new Date();
+        var prevDate = this.beginDate;
+        this.seconds = this.datePartDiff(
+          prevDate.getSeconds(),
+          currDate.getSeconds(),
+          60
+        );
+        this.minutes = this.datePartDiff(
+          prevDate.getMinutes(),
+          currDate.getMinutes(),
+          60
+        );
+        this.hours = this.datePartDiff(
+          prevDate.getHours(),
+          currDate.getHours(),
+          24
+        );
+      };
+
+      CountUp.prototype.addLeadingZero = function (value) {
+        return value < 10 ? "0" + value : value;
+      };
+
+      CountUp.prototype.formatTime = function () {
+        this.seconds = this.addLeadingZero(this.seconds);
+        this.minutes = this.addLeadingZero(this.minutes);
+        this.hours = this.addLeadingZero(this.hours);
+      };
+
+      CountUp.prototype.updateCounter = function () {
+        this.calculate();
+        this.formatTime();
+        this.countainer.innerHTML = `
+        <strong style="font-size: 25px">${this.hours}</strong> <small style="font-size: 25px">:</small> <strong style="font-size: 25px">${this.minutes}</strong> <small style="font-size: 25px">:</small><strong style="font-size: 25px"> ${this.seconds}</strong>`;
+
+        var self = this;
+        setTimeout(function () {
+          self.updateCounter();
+        }, 1000);
+      };
+
+      window.onload = function () {
+        const data = JSON.parse(localStorage.getItem("tweet"));
+        new CountUp(new Date(data.created_at), "counter");
+      };
+    </script>
+  </body>
+</html>

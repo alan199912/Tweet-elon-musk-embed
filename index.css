@@ -1,0 +1,136 @@
+#progressBar {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  border: 5px solid #ccc;
+  border-radius: 50px;
+}
+
+#barStatus {
+  /* position: relative;
+  top: 35px;
+  left: 0%;
+  width: 5px;
+  height: 30px;
+  background: #000;
+  z-index: 1; */
+}
+
+#no {
+  width: 20%;
+  height: 100%;
+  background: #e82b2f;
+  border-radius: 50px 0 0 50px;
+  border-right: 5px solid #ccc;
+  opacity: 0.5;
+}
+
+#no::before {
+  content: "NO";
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+#low {
+  width: 20%;
+  height: 100%;
+  background: #ff750a;
+  border-right: 5px solid #ccc;
+  opacity: 0.5;
+}
+
+#low::before {
+  content: "LOW";
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+#medium {
+  width: 20%;
+  height: 100%;
+  background: #f9b961;
+  border-right: 5px solid #ccc;
+  opacity: 0.5;
+}
+
+#medium::before {
+  content: "MEDIUM";
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+#normal {
+  width: 20%;
+  height: 100%;
+  background: #eddc2a;
+  border-right: 5px solid #ccc;
+  opacity: 0.5;
+}
+
+#normal::before {
+  content: "NORMAL";
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+#high {
+  width: 20%;
+  height: 100%;
+  background: #b4df50;
+  border-right: 5px solid #ccc;
+  opacity: 0.5;
+}
+
+#high::before {
+  content: "HIGH";
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+#max {
+  width: 20%;
+  height: 100%;
+  background: #44c82d;
+  border-radius: 0 50px 50px 0;
+  opacity: 0.5;
+}
+
+#max::before {
+  content: "MAX";
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+#score {
+  font-size: 76px;
+}
